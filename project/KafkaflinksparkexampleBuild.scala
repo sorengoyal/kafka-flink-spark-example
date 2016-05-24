@@ -13,5 +13,10 @@ object KafkaflinksparkexampleBuild extends Build {
       scalaVersion := "2.10.2"
       // add other settings here
     )
+  ).settings(
+    // http://mvnrepository.com/artifact/org.apache.kafka/kafka_2.10
+    libraryDependencies += "org.apache.kafka" % "kafka_2.10" % "0.10.0.0"
   )
 }
+
+
