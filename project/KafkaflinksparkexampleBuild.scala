@@ -15,8 +15,10 @@ object KafkaflinksparkexampleBuild extends Build {
     )
   ).settings(
     // http://mvnrepository.com/artifact/org.apache.kafka/kafka_2.10
-    libraryDependencies += "org.apache.kafka" % "kafka_2.10" % "0.10.0.0"
-  )
+    libraryDependencies ++= Seq(
+        "org.apache.kafka" % "kafka_2.10" % "0.10.0.0",
+        // http://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+        "org.apache.kafka" % "kafka-clients" % "0.10.0.0"
+      )
+    )
 }
-
-
