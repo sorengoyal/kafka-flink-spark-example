@@ -28,6 +28,7 @@ class Producer(topic: String, isAsync: Boolean) extends Thread {
       kproducer.send(new ProducerRecord(topic, messageNo, message)).get()
       println("Sent message: (" + messageNo + ", " + message + ")")
     }
+    messageNo += 1
   }
   override def toString() = {
     topic

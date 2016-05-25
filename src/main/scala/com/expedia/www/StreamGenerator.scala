@@ -18,12 +18,12 @@ object StreamGenerator {
       val hotelId = rnd.nextInt(100)
       val time = System.currentTimeMillis()
       impression.run(customerId.toString + " " + hotelId.toString + " " + time.toString)
-      if (rnd.nextInt(100) < 10)
+      if (rnd.nextInt(100) < numOfMessages/10)
         clicks.run(customerId.toString + " " + hotelId.toString + " " + (time + rnd.nextInt(1000)).toString)
     }
     val consumerImp = new Consumer("impressions")
     val consumerClk = new Consumer("clicks")
-    while(consumerImp.numOfMessages < 100) {
+    while(consumerImp.numOfMessages <= numOfMessages) {
       consumerImp.doWork()
       consumerClk.doWork()
     }

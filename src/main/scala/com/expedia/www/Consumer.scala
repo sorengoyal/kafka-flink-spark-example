@@ -4,17 +4,15 @@ package com.expedia.www
   * Created by sogoyal on 5/25/16.
   */
 //TODO:Not working. But not necessary anyways
-//import org.apache.kafka.
+import kafka.utils.ShutdownableThread
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import scala.collection.JavaConverters._
 
 import java.util.Collections
 import java.util.Properties
 
-class Consumer(topic: String) extends Thread {
+class Consumer(topic: String) extends ShutdownableThread(topic, false) {
   var numOfMessages: Int = 0
   val props = new Properties
   props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
@@ -26,8 +24,8 @@ class Consumer(topic: String) extends Thread {
   props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
   val kconsumer = new KafkaConsumer[Int, String](props)
   kconsumer.subscribe(Collections.singletonList(topic))
-  def doWork() = {
-    val records = kconsumer.poll(1000).asScala
+  override def doWork() = {
+    val records = kconsumer.poll(100).asScala
     for (record <- records) {
       numOfMessages += 1
       println("Received message: (" + topic + "," + record.key() + ", " + record.value() + ")" )
@@ -36,9 +34,5 @@ class Consumer(topic: String) extends Thread {
 
   override def toString = {
     topic
-  }
-
-  def isInterruptible(): Boolean = {
-    false
   }
 }

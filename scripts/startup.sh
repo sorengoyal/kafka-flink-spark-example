@@ -11,8 +11,9 @@ export KAFKA_HOME=${ROOT}/external/kafka_2.10-0.10.0.0
 ${KAFKA_HOME}/bin/kafka-server-start.sh ${KAFKA_HOME}/config/server.properties
 
 #Stop Zookeeper and Kafka
-${KAFKA_HOME}/bin/zookeeper-server-stop.sh
 ${KAFKA_HOME}/bin/kafka-server-stop.sh
+${KAFKA_HOME}/bin/zookeeper-server-stop.sh
+
 
 #Kafka Topics
 export ROOT=/Users/sogoyal/projects
