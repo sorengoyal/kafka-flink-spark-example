@@ -18,7 +18,7 @@ import org.apache.flink.streaming.connectors.kafka.KafkaSink
 import org.apache.flink.streaming.util.serialization.{SerializationSchema, SimpleStringSchema}
 
 
-object FlinkStreamingProcessor {
+object FlinkImpressionsProcessor {
 
   class Impression(var customerid: Int, var hotelid: Int, var timestamp: Long)
 
@@ -56,8 +56,5 @@ object FlinkStreamingProcessor {
       .map(new StringToImpression)
       .addSink(new KafkaSink[Impression]("localhost:9092", "structuredImpressions", ImpressionSchema ))
     env.execute()
-
   }
-
-
 }

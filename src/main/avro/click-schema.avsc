@@ -1,0 +1,10 @@
+{
+    "namespace": "com.expedia",
+    "type": "record",
+    "name": "Click",
+    "fields": [
+        {"name": "customerid", "type": "int"},
+        {"name": "hotelid",  "type": "int"},
+        {"name": "timestamp", "type": "long"}
+    ]
+}
