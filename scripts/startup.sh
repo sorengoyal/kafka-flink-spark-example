@@ -26,4 +26,7 @@ export ROOT=/Users/sogoyal/projects
 export KAFKA_HOME=${ROOT}/external/kafka_2.10-0.10.0.0
 ${KAFKA_HOME}/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic impressions --from-beginning
 
-
+#Producer
+export ROOT=/Users/sogoyal/projects
+export KAFKA_HOME=${ROOT}/external/kafka_2.10-0.10.0.0
+${KAFKA_HOME}/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic impressions

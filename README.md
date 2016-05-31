@@ -40,4 +40,6 @@ Flink
 =====
 Source :
 [Flink data stream to and form Kafka](https://github.com/dataArtisans/kafka-example/)
+[Avro + Flink](https://gist.github.com/StephanEwen/d515e10dd1c609f70bed)
+[Better understanding of Flink is at their page](https://ci.apache.org/projects/flink/flink-docs-release-1.0/apis/common/index.html)
 
