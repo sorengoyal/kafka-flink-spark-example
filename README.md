@@ -43,3 +43,9 @@ Source :
 [Avro + Flink](https://gist.github.com/StephanEwen/d515e10dd1c609f70bed)
 [Better understanding of Flink is at their page](https://ci.apache.org/projects/flink/flink-docs-release-1.0/apis/common/index.html)
 
+Avro
+====
+[Better API for Avro](http://aseigneurin.github.io/2016/03/04/kafka-spark-avro-producing-and-consuming-avro-messages.html)
+Common erros - 
+Searialzable is called many times. So the schema must be not be read from inside the function.
+The constructor should not contain any lies of code otherwise error -  "KafkaSink sink is not serializable"

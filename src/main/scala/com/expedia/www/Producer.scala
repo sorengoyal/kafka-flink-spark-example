@@ -20,9 +20,8 @@ class Producer(topic: String, isAsync: Boolean) extends Thread
   val producer: kafka.javaapi.producer.Producer[Integer, String] = new kafka.javaapi.producer.Producer[Integer, String](new ProducerConfig(props))
 
   def run(message: String): Unit = {
-    while(true) {
       producer.send(new KeyedMessage[Integer, String](topic, message))
+      println("Producer:" + topic + ":" + message)
       messageNo += 1
-    }
   }
 }

@@ -22,9 +22,11 @@ object FlinkImpressionsProcessor {
 
   class Impression(var customerid: Int, var hotelid: Int, var timestamp: Long)
 
+  val schemaFile = new File("src/main/avro/impression-schema-spark.avsc")
+  val schema: Schema = new Schema.Parser().parse(schemaFile)
+
   object ImpressionSchema extends SerializationSchema[Impression, Array[Byte]] {
     override def serialize(element: Impression): Array[Byte] = {
-      val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/impression-schema.avsc"))
       val impression: GenericRecord = new GenericData.Record(schema)
       val writer: DatumWriter[GenericRecord] = new GenericDatumWriter[GenericRecord](schema)
       impression.put("customerid", element.customerid)
@@ -35,7 +37,9 @@ object FlinkImpressionsProcessor {
       writer.write(impression, encoder)
       encoder.flush()
       out.close()
-      out.toByteArray()
+      val output = out.toByteArray()
+      println("structuredImpressions:" + output)
+      output
     }
   }
 

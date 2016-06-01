@@ -14,9 +14,9 @@ object StreamGenerator {
     val clicks = new Producer("clicks", true)
     for (i <- 1 to numOfMessages) {
       Thread.sleep(500)
-      val customerId = rnd.nextInt(100)
-      val hotelId = rnd.nextInt(100)
-      val time = System.currentTimeMillis()
+      val customerId = 1 //rnd.nextInt(100)
+      val hotelId = 1 //rnd.nextInt(100)
+      val time = 10 //System.currentTimeMillis()
       impression.run(customerId.toString + " " + hotelId.toString + " " + time.toString)
       if (rnd.nextInt(100) < numOfMessages/10)
         clicks.run(customerId.toString + " " + hotelId.toString + " " + (time + rnd.nextInt(1000)).toString)
