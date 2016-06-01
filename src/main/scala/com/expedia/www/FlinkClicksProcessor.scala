@@ -18,10 +18,12 @@ import org.apache.flink.streaming.util.serialization.{SerializationSchema, Simpl
 object FlinkClicksProcessor {
   class Click(var customerid: Int, var hotelid: Int, var timestamp: Long)
 
+  val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/click-schema.avsc"))
+  val click: GenericRecord = new GenericData.Record(schema)
+
   object ClickSchema extends SerializationSchema[Click, Array[Byte]] {
     override def serialize(element: Click): Array[Byte] = {
-      val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/click-schema.avsc"))
-      val click: GenericRecord = new GenericData.Record(schema)
+
       val writer: DatumWriter[GenericRecord] = new GenericDatumWriter[GenericRecord](schema)
       click.put("customerid", element.customerid)
       click.put("hotelid", element.hotelid)
@@ -31,7 +33,9 @@ object FlinkClicksProcessor {
       writer.write(click, encoder)
       encoder.flush()
       out.close()
-      out.toByteArray()
+      val output = out.toByteArray()
+      println("structuredClicks:" + output)
+      output
     }
   }
 
