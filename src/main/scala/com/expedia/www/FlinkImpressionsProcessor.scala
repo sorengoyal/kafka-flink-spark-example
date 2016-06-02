@@ -18,19 +18,20 @@ import org.apache.flink.streaming.connectors.kafka.KafkaSink
 import org.apache.flink.streaming.util.serialization.{SerializationSchema, SimpleStringSchema}
 
 
+
 object FlinkImpressionsProcessor {
 
-  class Impression(var customerid: Int, var hotelid: Int, var timestamp: Long)
+  class Impression(var customer: String, var hotel: String, var timestamp: String)
 
-  val schemaFile = new File("src/main/avro/impression-schema-spark.avsc")
+  val schemaFile = new File("src/main/avro/impression-schema.avsc")
   val schema: Schema = new Schema.Parser().parse(schemaFile)
 
   object ImpressionSchema extends SerializationSchema[Impression, Array[Byte]] {
     override def serialize(element: Impression): Array[Byte] = {
       val impression: GenericRecord = new GenericData.Record(schema)
       val writer: DatumWriter[GenericRecord] = new GenericDatumWriter[GenericRecord](schema)
-      impression.put("customerid", element.customerid)
-      impression.put("hotelid", element.hotelid)
+      impression.put("customer", element.customer)
+      impression.put("hotel", element.hotel)
       impression.put("timestamp", element.timestamp)
       val out: ByteArrayOutputStream = new ByteArrayOutputStream
       val encoder: BinaryEncoder = EncoderFactory.get().binaryEncoder(out, null)
@@ -39,14 +40,14 @@ object FlinkImpressionsProcessor {
       out.close()
       val output = out.toByteArray()
       println("structuredImpressions:" + output)
-      output
+      return output
     }
   }
 
   class StringToImpression extends MapFunction[String, Impression] {
     override def map(element: String): Impression = {
       val strs: Array[String] = element.split(" ")
-      new Impression(strs(0).toInt, strs(1).toInt, strs(2).toLong)
+      new Impression(strs(0), strs(1), strs(2))
     }
   }
 

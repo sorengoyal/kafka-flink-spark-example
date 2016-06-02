@@ -9,7 +9,7 @@ import java.util.Properties
 import kafka.producer.KeyedMessage
 import kafka.producer.ProducerConfig
 
-class Producer(topic: String, isAsync: Boolean) extends Thread
+class KafkaProducer(topic: String, isAsync: Boolean) extends Thread
 {
   var messageNo: Int = 0
   val props: Properties  = new Properties()
@@ -21,7 +21,7 @@ class Producer(topic: String, isAsync: Boolean) extends Thread
 
   def run(message: String): Unit = {
       producer.send(new KeyedMessage[Integer, String](topic, message))
-      println("Producer:" + topic + ":" + message)
+      println("Producer:" +  message)
       messageNo += 1
   }
 }

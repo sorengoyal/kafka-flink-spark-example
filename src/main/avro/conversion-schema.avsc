@@ -1,10 +1,11 @@
 {
     "namespace": "com.expedia",
     "type": "record",
-    "name": "Click",
+    "name": "Conversion",
     "fields": [
         {"name": "customer", "type": "string"},
         {"name": "hotel",  "type": "string"},
-        {"name": "timestamp", "type": "string"}
-]
+        {"name": "impressionTime", "type": "string"}
+        {"name": "clickTime", "type": "string"}
+    ]
 }

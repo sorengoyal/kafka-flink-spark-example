@@ -16,7 +16,7 @@ import org.apache.flink.streaming.util.serialization.{SerializationSchema, Simpl
   * Created by sogoyal on 5/31/16.
   */
 object FlinkClicksProcessor {
-  class Click(var customerid: Int, var hotelid: Int, var timestamp: Long)
+  class Click(var customer: String, var hotel: String, var timestamp: Int)
 
   val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/click-schema.avsc"))
   val click: GenericRecord = new GenericData.Record(schema)
@@ -25,8 +25,8 @@ object FlinkClicksProcessor {
     override def serialize(element: Click): Array[Byte] = {
 
       val writer: DatumWriter[GenericRecord] = new GenericDatumWriter[GenericRecord](schema)
-      click.put("customerid", element.customerid)
-      click.put("hotelid", element.hotelid)
+      click.put("customer", element.customer)
+      click.put("hotel", element.hotel)
       click.put("timestamp", element.timestamp)
       val out: ByteArrayOutputStream = new ByteArrayOutputStream
       val encoder: BinaryEncoder = EncoderFactory.get().binaryEncoder(out, null)
@@ -35,14 +35,14 @@ object FlinkClicksProcessor {
       out.close()
       val output = out.toByteArray()
       println("structuredClicks:" + output)
-      output
+      return output
     }
   }
 
   class StringToImpression extends MapFunction[String, Click] {
     override def map(element: String): Click = {
       val strs: Array[String] = element.split(" ")
-      new Click(strs(0).toInt, strs(1).toInt, strs(2).toLong)
+      new Click(strs(0), strs(1), strs(2).toInt)
     }
   }
 

@@ -22,6 +22,9 @@ export ROOT=/Users/sogoyal/projects
 export KAFKA_HOME=${ROOT}/external/kafka_2.10-0.10.0.0
 ${KAFKA_HOME}/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic impressions
 ${KAFKA_HOME}/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic clicks
+${KAFKA_HOME}/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic structuredClicks
+${KAFKA_HOME}/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic structuredImpressions
+${KAFKA_HOME}/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic conversions
 
 #Consumer
 export ROOT=/Users/sogoyal/projects

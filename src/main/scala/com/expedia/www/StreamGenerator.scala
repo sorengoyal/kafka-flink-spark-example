@@ -3,6 +3,8 @@ package com.expedia.www
 
 object StreamGenerator {
 
+  val customerNames = Array("Arya", "Ned", "Catelyn", "Joffery", "Cersei", "Jamie", "Daenerys", "Tyrion", "Ser-Jonah", "Bran", "Faceless-Assassins")
+  val hotelNames = Array("King's-Landing", "Mereen", "Winterfell", "High-Garden", "Dorne", "Wall", "Riverunn", "Iron-Islands", "Braavos")
   def main(args: Array[String]): Unit = {
     if (args.length != 1) {
       println("Usage: StreamGenerator <Num of Messages>")
@@ -10,16 +12,18 @@ object StreamGenerator {
     }
     val numOfMessages = args(0).toInt
     val rnd = new scala.util.Random
-    val impression = new Producer("impressions", true)
-    val clicks = new Producer("clicks", true)
+    val impression = new KafkaProducer("impressions", true)
+    val clicks = new KafkaProducer("clicks", true)
     for (i <- 1 to numOfMessages) {
       Thread.sleep(500)
-      val customerId = 1 //rnd.nextInt(100)
-      val hotelId = 1 //rnd.nextInt(100)
-      val time = 10 //System.currentTimeMillis()
-      impression.run(customerId.toString + " " + hotelId.toString + " " + time.toString)
+      val customer = customerNames(rnd.nextInt(11))
+      val hotel = hotelNames(rnd.nextInt(8))
+      val time = System.currentTimeMillis()
+      impression.run(customer + " " + hotel + " " + (time/100000000).toString)
       if (rnd.nextInt(100) < numOfMessages/10)
-        clicks.run(customerId.toString + " " + hotelId.toString + " " + (time + rnd.nextInt(1000)).toString)
+        clicks.run(customer + " " + hotel + " " + (time/100000000 + rnd.nextInt(1000)).toString)
+      else
+        clicks.run(customer +  " " + hotel + " " + 0.toString)
     }
     //val consumerImp = new Consumer("impressions")
     //val consumerClk = new Consumer("clicks")

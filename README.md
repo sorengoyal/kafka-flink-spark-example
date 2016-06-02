@@ -49,3 +49,9 @@ Avro
 Common erros - 
 Searialzable is called many times. So the schema must be not be read from inside the function.
 The constructor should not contain any lies of code otherwise error -  "KafkaSink sink is not serializable"
+
+Spark
+=====
+[Kafka + Spark Receive](http://spark.apache.org/docs/latest/streaming-kafka-integration.html)
+[Kafka + Spark Produce](http://allegro.tech/2015/08/spark-kafka-integration.html)
+[Spark Programmming Guide](http://spark.apache.org/docs/latest/programming-guide.html#overview)
