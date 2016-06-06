@@ -72,31 +72,34 @@ object SparkProcessor {
 //      println("Clicks:" + record.get("customer").toString + record.get("hotel").toString + record.get("timestamp").toString)
 //      (new Tag(record.get("customer").toString, record.get("hotel").toString), record.get("timestamp").toString)
 //    })
+   // val kafkaSink = ssc.sparkContext.broadcast(MyKafkaSink(props))
+    val out = imp.groupByKey().map( (record) => {
+      val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/conversion-schema.avsc"))
+      val recordInjection: Injection[GenericRecord, Array[Byte]] = GenericAvroCodecs.toBinary(schema)
+      val avroRecord: GenericRecord = new GenericData.Record(schema)
+      println("[LOG]Record:" + record._1 + "|" + record._2.toString())
+      val hotelIndex = record._1.charAt(0) - '0' + 1
+      println("Hotel Index:" + hotelIndex)
+      avroRecord.put("customer", record._1.substring(1, hotelIndex))
+      avroRecord.put("hotel", record._1.substring(hotelIndex))
+      val times = record._2.toArray
+      println("Times:" + times(0) + times(1))
+      avroRecord.put("impressionTime", times(0))
+      avroRecord.put("clickTime", times(1))
+      //println("AvrorecordavroRecord.toString)
+      val output: Array[Byte] = recordInjection.apply(avroRecord)
+      output
+    })
 
-    val props: Properties  = new Properties()
-    props.put("serializer.class", "kafka.serializer.StringEncoder")
-    props.put("metadata.broker.list", "localhost:9092")
-
-    val kafkaSink = ssc.sparkContext.broadcast(MyKafkaSink(props))
-    val out = imp.groupByKey()
-      out.foreachRDD(rdd => {
-      rdd.foreach((record) => {
-        val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/conversion-schema.avsc"))
-        val recordInjection: Injection[GenericRecord, Array[Byte]] = GenericAvroCodecs.toBinary(schema)
-        val avroRecord: GenericRecord = new GenericData.Record(schema)
-        println("[LOG]Record:" + record._1 + "|" + record._2.toString())
-        val hotelIndex = record._1.charAt(0) - '0' + 1
-        println("Hotel Index:" + hotelIndex)
-        avroRecord.put("customer", record._1.substring(1, hotelIndex))
-        avroRecord.put("hotel", record._1.substring(hotelIndex))
-        val times = record._2.toArray
-        println("Times:" + times(0) + times(1))
-        avroRecord.put("impressionTime", times(0))
-        avroRecord.put("clickTime", times(1))
-        //println("AvrorecordavroRecord.toString)
-        val output: Array[Byte] = recordInjection.apply(avroRecord)
-        kafkaSink.value.send("conversions", output)
-      })
+    out.foreachRDD(rdd => {
+      val props: Properties  = new Properties()
+      //props.put("serializer.class", "kafka.serializer.StringEncoder")
+      props.put("metadata.broker.list", "localhost:9092")
+      val producer = new Producer[Integer, Array[Byte]](new ProducerConfig(props))
+      for (msg <- rdd.collect ) {
+        producer.send(new KeyedMessage[Integer, Array[Byte]]("conversions", msg))
+      }
+      producer.close
     })
     ssc.start()
     ssc.awaitTermination()
