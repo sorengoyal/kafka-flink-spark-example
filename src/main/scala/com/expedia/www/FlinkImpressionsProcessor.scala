@@ -39,7 +39,7 @@ object FlinkImpressionsProcessor {
       encoder.flush()
       out.close()
       val output = out.toByteArray()
-      println("structuredImpressions:" + output)
+      println("structuredImpressions:" + element)
       return output
     }
   }

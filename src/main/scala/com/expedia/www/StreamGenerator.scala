@@ -3,7 +3,7 @@ package com.expedia.www
 
 object StreamGenerator {
 
-  val customerNames = Array("Arya", "Ned", "Catelyn", "Joffery", "Cersei", "Jamie", "Daenerys", "Tyrion", "Ser-Jonah", "Bran", "Faceless-Assassins")
+  val customerNames = Array("Arya", "Ned", "Catelyn", "Joffery", "Cersei", "Jamie", "Daenerys", "Tyrion", "Ser-Jonah", "Bran", "Faceless")
   val hotelNames = Array("King's-Landing", "Mereen", "Winterfell", "High-Garden", "Dorne", "Wall", "Riverunn", "Iron-Islands", "Braavos")
   def main(args: Array[String]): Unit = {
     if (args.length != 1) {
@@ -19,9 +19,9 @@ object StreamGenerator {
       val customer = customerNames(rnd.nextInt(11))
       val hotel = hotelNames(rnd.nextInt(8))
       val time = System.currentTimeMillis()
-      impression.run(customer + " " + hotel + " " + (time/100000000).toString)
+      impression.run(customer + " " + hotel + " " + (time%100000).toString)
       if (rnd.nextInt(100) < numOfMessages/10)
-        clicks.run(customer + " " + hotel + " " + (time/100000000 + rnd.nextInt(1000)).toString)
+        clicks.run(customer + " " + hotel + " " + (time%100000 + rnd.nextInt(1000)).toString)
       else
         clicks.run(customer +  " " + hotel + " " + 0.toString)
     }

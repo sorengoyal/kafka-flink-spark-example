@@ -16,7 +16,7 @@ import org.apache.flink.streaming.util.serialization.{SerializationSchema, Simpl
   * Created by sogoyal on 5/31/16.
   */
 object FlinkClicksProcessor {
-  class Click(var customer: String, var hotel: String, var timestamp: Int)
+  class Click(var customer: String, var hotel: String, var timestamp: String)
 
   val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/click-schema.avsc"))
   val click: GenericRecord = new GenericData.Record(schema)
@@ -34,7 +34,7 @@ object FlinkClicksProcessor {
       encoder.flush()
       out.close()
       val output = out.toByteArray()
-      println("structuredClicks:" + output)
+      println("structuredClicks:" + element)
       return output
     }
   }
@@ -42,7 +42,7 @@ object FlinkClicksProcessor {
   class StringToImpression extends MapFunction[String, Click] {
     override def map(element: String): Click = {
       val strs: Array[String] = element.split(" ")
-      new Click(strs(0), strs(1), strs(2).toInt)
+      new Click(strs(0), strs(1), strs(2))
     }
   }
 

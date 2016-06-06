@@ -5,7 +5,7 @@
     "fields": [
         {"name": "customer", "type": "string"},
         {"name": "hotel",  "type": "string"},
-        {"name": "impressionTime", "type": "string"}
+        {"name": "impressionTime", "type": "string"},
         {"name": "clickTime", "type": "string"}
     ]
 }
