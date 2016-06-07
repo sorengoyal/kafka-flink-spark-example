@@ -23,24 +23,6 @@ import org.apache.spark.streaming.kafka._
 class Conversion(customer: String, hotel: String, impressionTime: Long, clickTime: Long )
 
 
-class MyKafkaSink(createProducer: () => Producer[Integer, Array[Byte]]) extends Serializable {
-  lazy val producer = createProducer()
-  def send(topic: String, message: Array[Byte]): Unit = producer.send(new KeyedMessage[Integer, Array[Byte]](topic, message))
-}
-
-object MyKafkaSink {
-  def apply(props: Properties): MyKafkaSink = {
-    val f = () => {
-      val producer = new Producer[Integer, Array[Byte]](new ProducerConfig(props))
-      sys.addShutdownHook {
-        producer.close
-      }
-      producer
-    }
-    new MyKafkaSink(f)
-  }
-}
-
 object SparkProcessor {
 
   class Tag(val customer: String, val hotel: String ) extends Serializable {
@@ -65,14 +47,6 @@ object SparkProcessor {
         //println(record.get("customer").toString + record.get("hotel").toString + record.get("timestamp").toString)
       (record.get("customer").toString.length.toString + record.get("customer").toString + record.get("hotel").toString, record.get("timestamp").toString)
     })
-//    val clk = clicksStream.map((input: String) => {
-//      val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/click-schema.avsc"))
-//      val recordInjection: Injection[GenericRecord, Array[Byte]] = GenericAvroCodecs.toBinary(schema)
-//      val record: GenericRecord = recordInjection.invert(input.getBytes()).get //val record: GenericRecord = recordInjection.invert(avroRecord._2).get()
-//      println("Clicks:" + record.get("customer").toString + record.get("hotel").toString + record.get("timestamp").toString)
-//      (new Tag(record.get("customer").toString, record.get("hotel").toString), record.get("timestamp").toString)
-//    })
-   // val kafkaSink = ssc.sparkContext.broadcast(MyKafkaSink(props))
     val out = imp.groupByKey().map( (record) => {
       val schema: Schema = new Schema.Parser().parse(new File("src/main/avro/conversion-schema.avsc"))
       val recordInjection: Injection[GenericRecord, Array[Byte]] = GenericAvroCodecs.toBinary(schema)
