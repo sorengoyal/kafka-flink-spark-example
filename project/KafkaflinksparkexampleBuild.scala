@@ -14,12 +14,10 @@ object KafkaflinksparkexampleBuild extends Build {
       // add other settings here
     )
   ).settings(
-    // http://mvnrepository.com/artifact/org.apache.kafka/kafka_2.10
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-compiler" % "2.10.6",
       "org.scala-lang" % "scala-reflect" % "2.10.6",
       "org.apache.kafka" % "kafka_2.10" % "0.8.2.1",
-      // http://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
       "org.apache.kafka" % "kafka-clients" % "0.8.2.1",
       "org.apache.flink" % "flink-connector-kafka" % "0.9.1",
       "org.apache.flink" % "flink-streaming-scala" % "0.9.1", //flink streaming API
@@ -29,7 +27,9 @@ object KafkaflinksparkexampleBuild extends Build {
       "org.apache.spark" % "spark-streaming_2.10" % "1.5.1",
       "org.apache.spark" % "spark-streaming-kafka_2.10" % "1.5.1",
       "org.apache.storm" % "storm-core" % "0.10.1",
-      "org.apache.storm" % "storm-kafka" % "0.10.0"
+      "org.apache.storm" % "storm-kafka" % "0.10.0",
+      "log4j" % "log4j" % "1.2.17"
+      //"org.slf4j" % "slf4j-simple" % "1.7.5"
     )
   )
 }
